@@ -1,0 +1,8 @@
+table#liste_abonnes a{
+    white-space: nowrap;
+}
+
+header button{
+    background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity))!important;
+    border: none;
+}
