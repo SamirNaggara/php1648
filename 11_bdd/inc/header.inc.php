@@ -10,9 +10,14 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="<?=URL?>">Accueil</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>/inscription.php">Inscription</a>
-                    </li>
+                    <?php 
+                    if (!is_connect()){
+                        ?>
+                            <li clasZs="nav-item">
+                                <a class="nav-link" href="<?=URL?>/inscription.php">Inscription</a>
+                            </li>
+                    <?php } ?>
+                   
                     <li class="nav-item">
                         <a class="nav-link" href="<?=URL?>/ajout-livre.php">Ajout Livre</a>
                     </li>
@@ -25,12 +30,19 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="<?=URL?>/liste-livres.php">Liste livres</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?=URL . "?action=deconnexion"?>">Deconnexion</a>
+                            </li>
                     <?php } ?>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalConnexion">
-                            Se connecter
-                        </button>
-                    </li>
+                    <?php 
+                        if (!is_connect()){
+                            ?>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#modalConnexion">
+                                    Se connecter
+                                </button>
+                            </li>
+                        <?php } ?>
                 </ul>
             </div>
         </div>

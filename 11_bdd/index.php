@@ -3,6 +3,21 @@
     include("inc/init.inc.php");
     include("inc/functions.inc.php");
 
+    // Gere la deconnexion
+    if (isset($_GET["action"]) && $_GET["action"] == "deconnexion"){
+        session_destroy();
+        header("Location:".URL."?message=deconnexion");
+        die();
+        
+    }
+
+    // Affiche le message de deconnexion
+    if (isset($_GET["message"]) && $_GET["message"] == "deconnexion"){
+        $msg .= "<div class=\"alert alert-success w-50 mx-auto mt-5\" role=\"alert\">
+            Vous êtes bien deconnecté !
+          </div>";
+    }
+
 
     include("inc/head.inc.php");
     include("inc/header.inc.php");

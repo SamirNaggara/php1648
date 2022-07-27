@@ -87,3 +87,11 @@ function is_connect(){
     return false;
 }
 
+
+// Creer une fonction qui renvoie true si la personne connectée est admin
+
+function is_connect_admin(){
+
+}
+
+
