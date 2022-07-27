@@ -17,13 +17,16 @@
                                 <a class="nav-link" href="<?=URL?>/inscription.php">Inscription</a>
                             </li>
                     <?php } ?>
-                   
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>/ajout-livre.php">Ajout Livre</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?=URL?>/admin/liste-abonnes.php">Liste abonnés</a>
-                    </li>
+                    <?php if (is_connect_admin()){
+                        ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?=URL?>/ajout-livre.php">Ajout Livre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?=URL?>/admin/liste-abonnes.php">Liste abonnés</a>
+                        </li>
+                    <?php } ?>
+                    
                     <?php 
                         if (is_connect()){
                             ?>

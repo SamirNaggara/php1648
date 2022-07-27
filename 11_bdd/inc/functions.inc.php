@@ -62,6 +62,19 @@ function adresseOk(string $adresse):bool{
 
 }
 
+function imageOk(array $listePhoto):bool{
+
+    // On verifie si le type de la photo est dans la liste des formats autorisee dans le init
+    global $formatAutorisee;
+    if (!in_array($listePhoto["type"],$formatAutorisee)){
+        return false;
+    }
+   
+
+
+    return true;
+}
+
 
 function mailExiste(string $mail):bool{
     global $dbh;
@@ -88,10 +101,20 @@ function is_connect(){
 }
 
 
+
+
 // Creer une fonction qui renvoie true si la personne connectée est admin
 
 function is_connect_admin(){
+    if (!is_connect()){
+        return false;
+    }
 
+    if ($_SESSION["utilisateur"]["statut"] != 1){
+        return false;
+    }
+
+    return true;
 }
 
 

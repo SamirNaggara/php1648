@@ -3,6 +3,14 @@
 include("../inc/init.inc.php");
 include("../inc/functions.inc.php");
 
+if (!is_connect_admin()){
+    $_SESSION["erreur"] = "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
+        Attention, la liste des abonnés n'est accessible qu'aux administrateurs
+      </div>";
+    header("Location:".URL);
+    exit();
+}
+
 
 // Suppression d'un abonné
 

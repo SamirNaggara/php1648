@@ -3,6 +3,13 @@
     include("inc/init.inc.php");
     include("inc/functions.inc.php");
 
+    if (!is_connect()){
+        $_SESSION["erreur"] = "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
+        Attention, la liste des livres n'est accessible qu'aux membres connectés
+      </div>";
+        header("Location:" . URL);
+        exit();
+    }
 
     include("inc/head.inc.php");
     include("inc/header.inc.php");

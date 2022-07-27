@@ -29,8 +29,12 @@ $title = "My Bibli";
 // Definir l'url du site web 
 
 define("URL", 'http://localhost/php/11_bdd');
+define("CHEMIN_UPLOADS", $_SERVER["DOCUMENT_ROOT"] . "/PHP/11_bdd/upload/");
 
 
 // echo "<pre>";
 // print_r($_SERVER);
 // echo "</pre>";
+
+// Gestion des photos
+$formatAutorisee = ["image/png", "image/jpg","image/jpeg","image/gif"];

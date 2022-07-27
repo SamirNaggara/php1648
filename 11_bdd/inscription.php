@@ -2,12 +2,28 @@
 
     include("inc/init.inc.php");
     include("inc/functions.inc.php");
+
+    if (is_connect()){
+        $_SESSION["erreur"] = "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
+            Attention, la liste des abonnés n'est accessible qu'aux administrateurs
+          </div>";
+        header("Location:".URL);
+        exit();
+    }
+
+  
+    
     
     $title .= " - Inscription";
     
     // debug($_POST);
 
     if (!empty($_POST)){
+
+        // debug($_POST);
+        // debug($_FILES);
+        // debug($_SERVER);
+        // die();
 
         // On verifie le mail
         if (!isset($_POST["email"]) || !mailOk($_POST["email"])){ // Si le mail n'est pas valide
@@ -54,11 +70,30 @@
           </div>";
         }
 
-
+        // On verifie que la confidentialité a été accepté
         if (!isset($_POST["confidentialite"]) || $_POST["confidentialite"] != "ok"){
             $msg .= "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
             Vous devez accepter les politiques de confidentialité
           </div>";
+        }
+
+        // On verifie que la confidentialité a été accepté
+        if (!isset($_FILES["photo"]) || !imageOk($_FILES["photo"])){
+            $msg .= "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
+            Vous devez accepter les politiques de confidentialité
+          </div>";
+        }
+
+        if (empty($msg)){
+            // Enregistrer la photo a l'endroit choisi
+
+            $cheminPhoto = CHEMIN_UPLOADS . "photos_profils/profil-".time()."-".uniqid().$_FILES["photo"]["full_path"];
+
+            if (!move_uploaded_file($_FILES["photo"]["tmp_name"],$cheminPhoto)){
+                $msg .= "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
+                    Quelque chose ne s'est pas déroulé correctement au niveau de l'enregistrement de la photo.
+                </div>";
+            }
         }
 
         if (empty($msg)){
@@ -70,7 +105,7 @@
             $nom = trim(htmlentities($_POST["nom"]));
             $adresse = trim(htmlentities($_POST["adresse"]));
 
-            $requete = "INSERT INTO abonne (prenom, nom, mail, adresse, mdp) VALUES (:prenom,:nom,:email,:adresse,:mdp)";
+            $requete = "INSERT INTO abonne (prenom, nom, mail, adresse, mdp, photo) VALUES (:prenom,:nom,:email,:adresse,:mdp,:photo)";
 
             // On prépare la requete, puis on relie chaque élément a sa variable avec bindParam
             $requetePreparee = $dbh->prepare($requete);
@@ -80,6 +115,7 @@
             $requetePreparee->bindParam(":email", $email, PDO::PARAM_STR);
             $requetePreparee->bindParam(":adresse", $adresse, PDO::PARAM_STR);
             $requetePreparee->bindParam(":mdp", $mdp_hache, PDO::PARAM_STR);
+            $requetePreparee->bindParam(":photo", $cheminPhoto, PDO::PARAM_STR);
 
             // on execute la requette
             $resultat = $requetePreparee->execute();
@@ -111,7 +147,7 @@
 
 ?>
     <h1 class="text-center my-5">Inscription</h1>
-    <form action="" method="post" class="container w-75 mw-auto">
+    <form action="" method="post" class="container w-75 mw-auto" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" value="<?= (isset($_POST["email"])) ? $_POST["email"] : ""?>">
@@ -139,6 +175,10 @@
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="confidentialite" name="confidentialite" value="ok">
             <label class="form-check-label" for="confidentialite">J'accepte les politiques de confidentialités</label>
+        </div>
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="inscriptionPhoto" name="photo">
+            <label class="input-group-text" for="inscriptionPhoto">Photo de profil</label>
         </div>
         <button type="submit" class="btn btn-primary">Je m'inscris</button>
     </form>
