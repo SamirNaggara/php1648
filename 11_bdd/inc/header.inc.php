@@ -31,6 +31,9 @@
                         if (is_connect()){
                             ?>
                             <li class="nav-item">
+                                <a class="nav-link" href="<?=URL?>/profil.php">Profil</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="<?=URL?>/liste-livres.php">Liste livres</a>
                             </li>
                             <li class="nav-item">

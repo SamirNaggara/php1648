@@ -77,17 +77,24 @@
           </div>";
         }
 
-        // On verifie que la confidentialité a été accepté
-        if (!isset($_FILES["photo"]) || !imageOk($_FILES["photo"])){
-            $msg .= "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
-            Vous devez accepter les politiques de confidentialité
-          </div>";
-        }
 
-        if (empty($msg)){
+        // On envoie une erreur que si la photo existe...
+        if (!empty($_FILES["photo"]["name"])){
+            // Et que l'image n'est pas ok
+            if (!imageOk($_FILES["photo"])){
+                $msg .= "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
+                L'image n'est pas au format demandé
+              </div>";
+            }
+            
+        }
+        // On enregistre la photo, que s'il n'y a pas de message d'erreur ET qu'il y a bien une photo
+        $cheminPartiel = "";
+        if (empty($msg) && !empty($_FILES["photo"]["name"])){
             // Enregistrer la photo a l'endroit choisi
 
-            $cheminPhoto = CHEMIN_UPLOADS . "photos_profils/profil-".time()."-".uniqid().$_FILES["photo"]["full_path"];
+            $cheminPartiel = "photos_profils/profil-".time()."-".uniqid().$_FILES["photo"]["full_path"];
+            $cheminPhoto = CHEMIN_UPLOADS . $cheminPartiel;
 
             if (!move_uploaded_file($_FILES["photo"]["tmp_name"],$cheminPhoto)){
                 $msg .= "<div class=\"alert alert-warning w-50 mx-auto mt-5\" role=\"alert\">
@@ -115,7 +122,7 @@
             $requetePreparee->bindParam(":email", $email, PDO::PARAM_STR);
             $requetePreparee->bindParam(":adresse", $adresse, PDO::PARAM_STR);
             $requetePreparee->bindParam(":mdp", $mdp_hache, PDO::PARAM_STR);
-            $requetePreparee->bindParam(":photo", $cheminPhoto, PDO::PARAM_STR);
+            $requetePreparee->bindParam(":photo", $cheminPartiel, PDO::PARAM_STR);
 
             // on execute la requette
             $resultat = $requetePreparee->execute();
